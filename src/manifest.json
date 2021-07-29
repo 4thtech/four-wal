@@ -22,10 +22,10 @@
   "content_scripts": [{
     "js": ["js/content-script.js"],
     "matches": [
-      "http://the4thpillar.com/*",
-      "http://*.the4thpillar.com/*",
       "https://the4thpillar.com/*",
       "https://*.the4thpillar.com/*",
+      "https://4thtech.io/*",
+      "https://*.4thtech.io/*",
       "http://127.0.0.1/*",
       "https://127.0.0.1/*"
     ],
