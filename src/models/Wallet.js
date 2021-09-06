@@ -1,18 +1,20 @@
 import EthereumVault from '@/models/vaults/EthereumVault';
 import SubstrateVault from '@/models/vaults/SubstrateVault';
 import RsaVault from '@/models/vaults/RsaVault';
+import SolanaVault from '@/models/vaults/SolanaValut';
 import ethAddressToTolarAddress from '@/helpers/hashnet';
+import StorageService from './StorageService';
 
 export default class Wallet {
   constructor() {
     this.ethereumVault = new EthereumVault();
     this.substrateVault = new SubstrateVault();
     this.rsaVault = new RsaVault();
+    this.solanaValut = new SolanaVault();
   }
 
   getAccounts() {
     const ethereumAddress = this.ethereumVault.getDefaultAccount();
-
     return [
       {
         type: 'ETH',
@@ -29,6 +31,11 @@ export default class Wallet {
         name: 'Tolar Account',
         address: ethAddressToTolarAddress(ethereumAddress),
       },
+      {
+        type: 'SOL',
+        name: 'Solana Account',
+        address: this.solanaValut.getDefaultAccount(),
+      },
     ];
   }
 
@@ -37,6 +44,7 @@ export default class Wallet {
       eth: await this.ethereumVault.getBackupData(password),
       dot: this.substrateVault.getBackupData(password),
       rsa: this.rsaVault.getBackupData(password),
+      sol: this.solanaValut.getBackupData(password),
     };
   }
 
@@ -48,6 +56,7 @@ export default class Wallet {
       wallet.ethereumVault.create(),
       wallet.substrateVault.create(),
       wallet.rsaVault.create(),
+      wallet.solanaValut.create(),
     ]);
 
     return wallet;
@@ -67,7 +76,16 @@ export default class Wallet {
       wallet.ethereumVault.restore(encryptedVaults.eth, password),
       wallet.substrateVault.restore(encryptedVaults.dot, password),
       wallet.rsaVault.restore(encryptedVaults.rsa, password),
+      encryptedVaults.sol
+        ? wallet.solanaValut.restore(encryptedVaults.sol, password)
+        : wallet.solanaValut.create(),
     ]);
+
+    if (Object.keys(encryptedVaults).length < Object.keys(wallet).length) {
+      await wallet.getBackupData(password).then((backupData) => {
+        StorageService.saveWallet(JSON.stringify(backupData));
+      });
+    }
 
     return wallet;
   }

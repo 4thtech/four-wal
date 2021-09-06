@@ -28,6 +28,7 @@ export default {
         ETH: '#627eea',
         DOT: '#e6007a',
         TOL: '#13ceef',
+        SOL: '#14F195FF',
       };
 
       return colors[this.type];
