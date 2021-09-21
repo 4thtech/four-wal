@@ -73,6 +73,10 @@ class ContentScript {
         ContentScript.signEthereumTransaction(nonSyncMessage);
         break;
 
+      case NetworkMessageTypes.SIGN_SOLANA_TRANSACTION:
+        ContentScript.signSolanaTransaction(nonSyncMessage);
+        break;
+
       case NetworkMessageTypes.REQUEST_FILE_DOWNLOAD:
         ContentScript.requestFileDownload(nonSyncMessage);
         break;
@@ -121,6 +125,14 @@ class ContentScript {
 
   static signEthereumTransaction(message) {
     InternalMessage.payload(InternalMessageTypes.SIGN_ETHEREUM_TRANSACTION, message.payload)
+      .send()
+      .then((res) => {
+        this.respond(message, res);
+      });
+  }
+
+  static signSolanaTransaction(message) {
+    InternalMessage.payload(InternalMessageTypes.SIGN_SOLANA_TRANSACTION, message.payload)
       .send()
       .then((res) => {
         this.respond(message, res);

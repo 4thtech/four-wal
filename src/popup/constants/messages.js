@@ -9,6 +9,7 @@ export const InternalMessageTypes = {
   SUBSTRATE_SIGN_PAYLOAD: 'substrateSignPayload',
   SIGN_ETHEREUM_MESSAGE: 'signEthereumMessage',
   SIGN_ETHEREUM_TRANSACTION: 'signEthereumTransaction',
+  SIGN_SOLANA_TRANSACTION: 'signSolanaTransaction',
   REQUEST_FILE_DOWNLOAD: 'requestFileDownload',
 };
 
@@ -18,6 +19,7 @@ export const NetworkMessageTypes = {
   SUBSTRATE_SIGN_PAYLOAD: 'substrateSignPayload',
   SIGN_ETHEREUM_MESSAGE: 'signEthereumMessage',
   SIGN_ETHEREUM_TRANSACTION: 'signEthereumTransaction',
+  SIGN_SOLANA_TRANSACTION: 'signSolanaTransaction',
   REQUEST_FILE_DOWNLOAD: 'requestFileDownload',
 };
 

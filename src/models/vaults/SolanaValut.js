@@ -1,4 +1,4 @@
-import { Keypair } from '@solana/web3.js';
+import { Keypair, Transaction } from '@solana/web3.js';
 import { AES, enc } from 'crypto-js';
 
 export default class SolanaVault {
@@ -23,5 +23,12 @@ export default class SolanaVault {
 
   getBackupData(password) {
     return AES.encrypt(JSON.stringify({ secretKey: this.keypair.secretKey }), password).toString();
+  }
+
+  signTransaction(serializedTransaction) {
+    const transaction = Transaction.from(serializedTransaction.data);
+    transaction.sign(this.keypair);
+
+    return transaction.serialize();
   }
 }

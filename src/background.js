@@ -67,6 +67,10 @@ class Background {
         this.signEthereumTransaction(message.payload, sendResponse);
         break;
 
+      case InternalMessageTypes.SIGN_SOLANA_TRANSACTION:
+        this.signSolanaTransaction(message.payload, sendResponse);
+        break;
+
       case InternalMessageTypes.REQUEST_FILE_DOWNLOAD:
         this.requestFileDownload(message.payload, sendResponse);
         break;
@@ -167,27 +171,31 @@ class Background {
   };
 
   substrateSignPayload = async (payload, sendResponse) => {
-    if (!this.wallet) {
-      sendResponse(new Error('FOURwal is locked.'));
+    if (this.isWalletLocked(sendResponse)) {
       return;
     }
     sendResponse(await this.wallet.substrateVault.signPayload(payload));
   };
 
   signEthereumMessage = async (payload, sendResponse) => {
-    if (!this.wallet) {
-      sendResponse({ isError: true, message: 'FOURwal is locked' });
+    if (this.isWalletLocked(sendResponse)) {
       return;
     }
     sendResponse(await this.wallet.ethereumVault.signMessage(payload));
   };
 
   signEthereumTransaction = async (payload, sendResponse) => {
-    if (!this.wallet) {
-      sendResponse({ isError: true, message: 'FOURwal is locked' });
+    if (this.isWalletLocked(sendResponse)) {
       return;
     }
     sendResponse(await this.wallet.ethereumVault.signTransaction(payload));
+  };
+
+  signSolanaTransaction = async (payload, sendResponse) => {
+    if (this.isWalletLocked(sendResponse)) {
+      return;
+    }
+    sendResponse(await this.wallet.solanaValut.signTransaction(payload));
   };
 
   requestFileDownload = async (payload, sendResponse) => {
@@ -203,6 +211,14 @@ class Background {
       sendResponse({ isError: true, message: e.message });
     }
   };
+
+  isWalletLocked(sendResponse) {
+    if (!this.wallet) {
+      sendResponse({ isError: true, message: 'FOURwal is locked' });
+      return true;
+    }
+    return false;
+  }
 }
 
 /* eslint-disable no-new */
