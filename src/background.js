@@ -79,6 +79,10 @@ class Background {
         this.decryptFileData(message.payload, sendResponse);
         break;
 
+      case InternalMessageTypes.DECRYPT_ASYMMETRIC_DATA:
+        this.decryptAsymmetricData(message.payload, sendResponse);
+        break;
+
       default:
         break;
     }
@@ -222,6 +226,19 @@ class Background {
 
     try {
       const res = await this.wallet.rsaVault.decryptFileData(payload);
+      sendResponse(res);
+    } catch (e) {
+      sendResponse({ isError: true, message: e.message });
+    }
+  };
+
+  decryptAsymmetricData = async (payload, sendResponse) => {
+    if (this.isWalletLocked(sendResponse)) {
+      return;
+    }
+
+    try {
+      const res = await this.wallet.rsaVault.decryptAsymmetricData(payload);
       sendResponse(res);
     } catch (e) {
       sendResponse({ isError: true, message: e.message });

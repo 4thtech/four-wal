@@ -92,4 +92,19 @@ export default class InpageProvider {
         .catch((e) => reject(new Error(e.message)));
     });
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  decryptAsymmetricData(data) {
+    return new Promise((resolve, reject) => {
+      if (!data) {
+        reject(new Error('Data is required.'));
+      }
+
+      NetworkMessageService.send(stream, NetworkMessageTypes.DECRYPT_ASYMMETRIC_DATA, data)
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((e) => reject(new Error(e.message)));
+    });
+  }
 }

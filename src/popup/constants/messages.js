@@ -12,6 +12,7 @@ export const InternalMessageTypes = {
   SIGN_SOLANA_TRANSACTION: 'signSolanaTransaction',
   REQUEST_FILE_DOWNLOAD: 'requestFileDownload',
   DECRYPT_FILE_DATA: 'decryptFileData',
+  DECRYPT_ASYMMETRIC_DATA: 'decryptAsymmetricData',
 };
 
 export const NetworkMessageTypes = {
@@ -23,6 +24,7 @@ export const NetworkMessageTypes = {
   SIGN_SOLANA_TRANSACTION: 'signSolanaTransaction',
   REQUEST_FILE_DOWNLOAD: 'requestFileDownload',
   DECRYPT_FILE_DATA: 'decryptFileData',
+  DECRYPT_ASYMMETRIC_DATA: 'decryptAsymmetricData',
 };
 
 export const PairingTags = {

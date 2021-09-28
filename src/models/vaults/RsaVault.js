@@ -116,4 +116,11 @@ export default class RsaVault {
 
     return Buffer.concat([decipher.update(encryptedFileData), decipher.final()]);
   }
+
+  decryptAsymmetricData(data) {
+    const key = new NodeRSA(this.privateKey);
+
+    // Decrypt asymmetric part
+    return key.decrypt(data, 'base64');
+  }
 }
