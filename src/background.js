@@ -75,6 +75,10 @@ class Background {
         this.requestFileDownload(message.payload, sendResponse);
         break;
 
+      case InternalMessageTypes.DECRYPT_FILE_DATA:
+        this.decryptFileData(message.payload, sendResponse);
+        break;
+
       default:
         break;
     }
@@ -199,13 +203,25 @@ class Background {
   };
 
   requestFileDownload = async (payload, sendResponse) => {
-    if (!this.wallet) {
-      sendResponse({ isError: true, message: 'FOURwal is locked' });
+    if (this.isWalletLocked(sendResponse)) {
       return;
     }
 
     try {
       const res = await this.wallet.rsaVault.downloadFile(payload);
+      sendResponse(res);
+    } catch (e) {
+      sendResponse({ isError: true, message: e.message });
+    }
+  };
+
+  decryptFileData = async (payload, sendResponse) => {
+    if (this.isWalletLocked(sendResponse)) {
+      return;
+    }
+
+    try {
+      const res = await this.wallet.rsaVault.decryptFileData(payload);
       sendResponse(res);
     } catch (e) {
       sendResponse({ isError: true, message: e.message });

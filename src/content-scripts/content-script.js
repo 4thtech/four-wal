@@ -81,6 +81,10 @@ class ContentScript {
         ContentScript.requestFileDownload(nonSyncMessage);
         break;
 
+      case NetworkMessageTypes.DECRYPT_FILE_DATA:
+        ContentScript.decryptFileData(nonSyncMessage);
+        break;
+
       default:
         break;
     }
@@ -141,6 +145,14 @@ class ContentScript {
 
   static requestFileDownload(message) {
     InternalMessage.payload(InternalMessageTypes.REQUEST_FILE_DOWNLOAD, message.payload)
+      .send()
+      .then((res) => {
+        this.respond(message, res);
+      });
+  }
+
+  static decryptFileData(message) {
+    InternalMessage.payload(InternalMessageTypes.DECRYPT_FILE_DATA, message.payload)
       .send()
       .then((res) => {
         this.respond(message, res);

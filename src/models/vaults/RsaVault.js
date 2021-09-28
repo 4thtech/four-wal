@@ -58,28 +58,8 @@ export default class RsaVault {
         reader.readAsArrayBuffer(request.response);
         reader.onload = () => {
           try {
-            const key = new NodeRSA(this.privateKey);
             const fileData = Buffer.from(reader.result, 'base64').toString().split(':');
-
-            // Split asymmetric & symmetric part
-            const asymmetric = fileData[0];
-            const symmetric = fileData[1];
-
-            // Decrypt asymmetric part
-            const decrypted = key.decrypt(asymmetric, 'base64');
-            const symPrefix = Buffer.from(decrypted, 'base64').toString().split(':');
-
-            // Get key & iv for symmetric decryption
-            const symKey = Buffer.from(symPrefix[0], 'base64');
-            const iv = Buffer.from(symPrefix[1], 'base64');
-
-            // Decrypt symmetric encrypted data
-            const encryptedFileData = Buffer.from(symmetric, 'base64');
-            const decipher = crypto.createDecipheriv('aes-256-cbc', symKey, iv);
-            const decryptedFileData = Buffer.concat([
-              decipher.update(encryptedFileData),
-              decipher.final(),
-            ]);
+            const decryptedFileData = this.decryptEncryptedData(fileData);
 
             // Download decrypted file
             const decryptedFile = new Blob([Buffer.from(decryptedFileData)], {
@@ -98,5 +78,42 @@ export default class RsaVault {
       };
       request.send();
     });
+  }
+
+  decryptFileData(encryptedData) {
+    return new Promise((resolve, reject) => {
+      try {
+        const encoder = new TextEncoder(); // always utf-8
+        const data = Buffer.from(encoder.encode(encryptedData), 'base64').toString().split(':');
+        const decryptedData = this.decryptEncryptedData(data);
+
+        const dec = new TextDecoder('utf-8');
+        resolve({ isSuccess: true, data: dec.decode(decryptedData) });
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }
+
+  decryptEncryptedData(data) {
+    const key = new NodeRSA(this.privateKey);
+
+    // Split asymmetric & symmetric part
+    const asymmetric = data[0];
+    const symmetric = data[1];
+
+    // Decrypt asymmetric part
+    const decrypted = key.decrypt(asymmetric, 'base64');
+    const symPrefix = Buffer.from(decrypted, 'base64').toString().split(':');
+
+    // Get key & iv for symmetric decryption
+    const symKey = Buffer.from(symPrefix[0], 'base64');
+    const iv = Buffer.from(symPrefix[1], 'base64');
+
+    // Decrypt symmetric encrypted data
+    const encryptedFileData = Buffer.from(symmetric, 'base64');
+    const decipher = crypto.createDecipheriv('aes-256-cbc', symKey, iv);
+
+    return Buffer.concat([decipher.update(encryptedFileData), decipher.final()]);
   }
 }

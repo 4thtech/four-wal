@@ -11,6 +11,7 @@ export const InternalMessageTypes = {
   SIGN_ETHEREUM_TRANSACTION: 'signEthereumTransaction',
   SIGN_SOLANA_TRANSACTION: 'signSolanaTransaction',
   REQUEST_FILE_DOWNLOAD: 'requestFileDownload',
+  DECRYPT_FILE_DATA: 'decryptFileData',
 };
 
 export const NetworkMessageTypes = {
@@ -21,6 +22,7 @@ export const NetworkMessageTypes = {
   SIGN_ETHEREUM_TRANSACTION: 'signEthereumTransaction',
   SIGN_SOLANA_TRANSACTION: 'signSolanaTransaction',
   REQUEST_FILE_DOWNLOAD: 'requestFileDownload',
+  DECRYPT_FILE_DATA: 'decryptFileData',
 };
 
 export const PairingTags = {
