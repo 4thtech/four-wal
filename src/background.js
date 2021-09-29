@@ -158,7 +158,8 @@ class Background {
       type: 'application/json',
     });
 
-    chrome.downloads.download({
+    browser.downloads.download({
+      filename: `fourwal-backup-${Date.now()}.json`,
       url: URL.createObjectURL(fileData),
     });
   };
