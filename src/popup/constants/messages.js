@@ -13,6 +13,7 @@ export const InternalMessageTypes = {
   REQUEST_FILE_DOWNLOAD: 'requestFileDownload',
   DECRYPT_FILE_DATA: 'decryptFileData',
   DECRYPT_ASYMMETRIC_DATA: 'decryptAsymmetricData',
+  DECRYPT_MESSAGE: 'decryptMessage',
 };
 
 export const NetworkMessageTypes = {
@@ -25,6 +26,7 @@ export const NetworkMessageTypes = {
   REQUEST_FILE_DOWNLOAD: 'requestFileDownload',
   DECRYPT_FILE_DATA: 'decryptFileData',
   DECRYPT_ASYMMETRIC_DATA: 'decryptAsymmetricData',
+  DECRYPT_MESSAGE: 'decryptMessage',
 };
 
 export const PairingTags = {

@@ -123,4 +123,21 @@ export default class RsaVault {
     // Decrypt asymmetric part
     return key.decrypt(data, 'base64');
   }
+
+  decryptMessage(data) {
+    console.log(1, data);
+    const result = [];
+    if (Array.isArray(data)) {
+      data.forEach((item) => {
+        result.push({ index: item.index, content: this.decryptAsymmetricData(item.content) });
+      });
+
+      return result;
+    }
+
+    return this.decryptAsymmetricData({
+      index: data.index,
+      content: this.decryptAsymmetricData(data.content),
+    });
+  }
 }

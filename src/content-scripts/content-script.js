@@ -89,6 +89,10 @@ class ContentScript {
         ContentScript.decryptAsymmetricData(nonSyncMessage);
         break;
 
+      case NetworkMessageTypes.DECRYPT_MESSAGE:
+        ContentScript.decryptMessage(nonSyncMessage);
+        break;
+
       default:
         break;
     }
@@ -165,6 +169,14 @@ class ContentScript {
 
   static decryptAsymmetricData(message) {
     InternalMessage.payload(InternalMessageTypes.DECRYPT_ASYMMETRIC_DATA, message.payload)
+      .send()
+      .then((res) => {
+        this.respond(message, res);
+      });
+  }
+
+  static decryptMessage(message) {
+    InternalMessage.payload(InternalMessageTypes.DECRYPT_MESSAGE, message.payload)
       .send()
       .then((res) => {
         this.respond(message, res);

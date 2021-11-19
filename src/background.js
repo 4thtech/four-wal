@@ -83,6 +83,10 @@ class Background {
         this.decryptAsymmetricData(message.payload, sendResponse);
         break;
 
+      case InternalMessageTypes.DECRYPT_MESSAGE:
+        this.decryptMessage(message.payload, sendResponse);
+        break;
+
       default:
         break;
     }
@@ -240,6 +244,19 @@ class Background {
 
     try {
       const res = await this.wallet.rsaVault.decryptAsymmetricData(payload);
+      sendResponse(res);
+    } catch (e) {
+      sendResponse({ isError: true, message: e.message });
+    }
+  };
+
+  decryptMessage = async (payload, sendResponse) => {
+    if (this.isWalletLocked(sendResponse)) {
+      return;
+    }
+
+    try {
+      const res = await this.wallet.rsaVault.decryptMessage(payload);
       sendResponse(res);
     } catch (e) {
       sendResponse({ isError: true, message: e.message });
