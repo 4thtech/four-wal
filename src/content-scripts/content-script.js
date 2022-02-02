@@ -73,6 +73,10 @@ class ContentScript {
         ContentScript.signEthereumTransaction(nonSyncMessage);
         break;
 
+      case NetworkMessageTypes.SIGN_TOLAR_TRANSACTION:
+        ContentScript.signTolarTransaction(nonSyncMessage);
+        break;
+
       case NetworkMessageTypes.SIGN_SOLANA_TRANSACTION:
         ContentScript.signSolanaTransaction(nonSyncMessage);
         break;
@@ -137,6 +141,14 @@ class ContentScript {
 
   static signEthereumTransaction(message) {
     InternalMessage.payload(InternalMessageTypes.SIGN_ETHEREUM_TRANSACTION, message.payload)
+      .send()
+      .then((res) => {
+        this.respond(message, res);
+      });
+  }
+
+  static signTolarTransaction(message) {
+    InternalMessage.payload(InternalMessageTypes.SIGN_TOLAR_TRANSACTION, message.payload)
       .send()
       .then((res) => {
         this.respond(message, res);

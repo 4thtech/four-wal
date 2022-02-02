@@ -67,6 +67,10 @@ class Background {
         this.signEthereumTransaction(message.payload, sendResponse);
         break;
 
+      case InternalMessageTypes.SIGN_TOLAR_TRANSACTION:
+        this.signTolarTransaction(message.payload, sendResponse);
+        break;
+
       case InternalMessageTypes.SIGN_SOLANA_TRANSACTION:
         this.signSolanaTransaction(message.payload, sendResponse);
         break;
@@ -202,6 +206,13 @@ class Background {
       return;
     }
     sendResponse(await this.wallet.ethereumVault.signTransaction(payload));
+  };
+
+  signTolarTransaction = async (payload, sendResponse) => {
+    if (this.isWalletLocked(sendResponse)) {
+      return;
+    }
+    sendResponse(await this.wallet.ethereumVault.signTolarTransaction(payload));
   };
 
   signSolanaTransaction = async (payload, sendResponse) => {

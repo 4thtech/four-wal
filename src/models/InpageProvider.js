@@ -53,6 +53,17 @@ export default class InpageProvider {
   }
 
   // eslint-disable-next-line class-methods-use-this
+  signTolarTransaction(transaction) {
+    return new Promise((resolve, reject) => {
+      NetworkMessageService.send(stream, NetworkMessageTypes.SIGN_TOLAR_TRANSACTION, transaction)
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((e) => reject(new Error(e.message)));
+    });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
   signSolanaTransaction(transaction) {
     return new Promise((resolve, reject) => {
       NetworkMessageService.send(stream, NetworkMessageTypes.SIGN_SOLANA_TRANSACTION, transaction)
