@@ -32,6 +32,6 @@ export const NetworkMessageTypes = {
 };
 
 export const PairingTags = {
-  FOUR_WAL: 'fourWal',
-  INJECTED: 'fourWalInjected',
+  FOUR_WAL: 'universeWal',
+  INJECTED: 'universeWalInjected',
 };
