@@ -7,6 +7,16 @@
         <div class="mt-1">
           <default-button @click.native="exportBackupFile">Export backup JSON file</default-button>
         </div>
+        <div class="mt-1">
+          <default-button @click.native="exportEthereumBackup"
+            >Export Ethereum private key
+          </default-button>
+        </div>
+        <div class="mt-1">
+          <default-button @click.native="exportSolanaBackup"
+            >Export Solana private key
+          </default-button>
+        </div>
       </div>
 
       <div>
@@ -48,12 +58,23 @@ export default {
     exportBackupFile() {
       this[Actions.EXPORT_BACKUP]();
     },
+    exportEthereumBackup() {
+      this[Actions.EXPORT_ETHEREUM_BACKUP]();
+    },
+    exportSolanaBackup() {
+      this[Actions.EXPORT_SOLANA_BACKUP]();
+    },
     logout() {
       this[Actions.LOCK_WALLET]().then(() => {
         this.$router.push({ name: RouteNames.UNLOCK });
       });
     },
-    ...mapActions([Actions.LOCK_WALLET, Actions.EXPORT_BACKUP]),
+    ...mapActions([
+      Actions.LOCK_WALLET,
+      Actions.EXPORT_BACKUP,
+      Actions.EXPORT_ETHEREUM_BACKUP,
+      Actions.EXPORT_SOLANA_BACKUP,
+    ]),
   },
 };
 </script>

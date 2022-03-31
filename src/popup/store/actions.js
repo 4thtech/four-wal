@@ -41,6 +41,14 @@ const actions = {
     InternalMessage.payload(InternalMessageTypes.EXPORT_BACKUP).send();
   },
 
+  [Actions.EXPORT_ETHEREUM_BACKUP]: async () => {
+    InternalMessage.payload(InternalMessageTypes.EXPORT_ETHEREUM_BACKUP).send();
+  },
+
+  [Actions.EXPORT_SOLANA_BACKUP]: async () => {
+    InternalMessage.payload(InternalMessageTypes.EXPORT_SOLANA_BACKUP).send();
+  },
+
   [Actions.RESTORE_ACCOUNTS]: async ({ dispatch }, { json, password }) => {
     const res = await InternalMessage.payload(InternalMessageTypes.RESTORE_ACCOUNTS, {
       json,

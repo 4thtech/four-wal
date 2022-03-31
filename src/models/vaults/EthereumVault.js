@@ -23,6 +23,10 @@ export default class EthereumVault {
     return this.wallet.encrypt(password);
   }
 
+  getPrivateKey() {
+    return this.wallet.privateKey;
+  }
+
   signMessage(message) {
     return this.wallet.signMessage(message);
   }

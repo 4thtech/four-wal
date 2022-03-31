@@ -47,6 +47,14 @@ class Background {
         this.exportBackup();
         break;
 
+      case InternalMessageTypes.EXPORT_ETHEREUM_BACKUP:
+        this.exportEthereumBackup();
+        break;
+
+      case InternalMessageTypes.EXPORT_SOLANA_BACKUP:
+        this.exportSolanaBackup();
+        break;
+
       case InternalMessageTypes.RESTORE_ACCOUNTS:
         this.restoreAccounts(message.payload, sendResponse);
         break;
@@ -168,6 +176,30 @@ class Background {
 
     browser.downloads.download({
       filename: `fourwal-backup-${Date.now()}.json`,
+      url: URL.createObjectURL(fileData),
+    });
+  };
+
+  exportEthereumBackup = async () => {
+    const privateKey = this.wallet.ethereumVault.getPrivateKey();
+    const fileData = new Blob([Buffer.from(JSON.stringify(privateKey))], {
+      type: 'application/json',
+    });
+
+    browser.downloads.download({
+      filename: `fourwal-ethereum-backup-${Date.now()}.json`,
+      url: URL.createObjectURL(fileData),
+    });
+  };
+
+  exportSolanaBackup = async () => {
+    const privateKey = this.wallet.solanaValut.getPrivateKey();
+    const fileData = new Blob([Buffer.from(JSON.stringify(privateKey))], {
+      type: 'application/json',
+    });
+
+    browser.downloads.download({
+      filename: `fourwal-solana-backup-${Date.now()}.json`,
       url: URL.createObjectURL(fileData),
     });
   };

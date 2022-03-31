@@ -25,6 +25,7 @@
               type="password"
               class="block w-full shadow-sm focus:ring-blue-500 focus:border-blue-500 border-gray-300 rounded-md"
               v-model="repeatPassword"
+              @keypress.enter="create"
             />
           </div>
         </div>
