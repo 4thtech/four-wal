@@ -14,8 +14,8 @@ class Inject {
         msg.type === NetworkMessageTypes.PUSH_FOUR_WAL
       ) {
         // Inject to window
-        window.fourWal = {
-          name: 'four-wal',
+        window.spartanWal = {
+          name: 'spartan-wal',
           version: process.env.VUE_APP_VERSION,
           injector: new InpageProvider(stream, msg.payload),
         };

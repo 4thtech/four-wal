@@ -2,9 +2,11 @@
   <panel title="Accounts">
     <!-- Content -->
     <ul class="divide-y divide-gray-200">
-      <li v-for="account in wallet.accounts" :key="account.address">
-        <account-item :type="account.type" :name="account.name" :address="account.address" />
-      </li>
+      <template v-for="account in wallet.accounts">
+        <li :key="account.address" v-if="account.type === 'SOL'">
+          <account-item :type="account.type" :name="account.name" :address="account.address" />
+        </li>
+      </template>
     </ul>
     <!-- /End content -->
 

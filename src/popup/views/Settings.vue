@@ -5,14 +5,6 @@
       <div>
         <label for="project_name" class="block text-sm font-medium text-gray-700"> Backup </label>
         <div class="mt-1">
-          <default-button @click.native="exportBackupFile">Export backup JSON file</default-button>
-        </div>
-        <div class="mt-1">
-          <default-button @click.native="exportEthereumBackup"
-            >Export Ethereum private key
-          </default-button>
-        </div>
-        <div class="mt-1">
           <default-button @click.native="exportSolanaBackup"
             >Export Solana private key
           </default-button>
