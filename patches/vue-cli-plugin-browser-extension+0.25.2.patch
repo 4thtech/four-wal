@@ -1,0 +1,62 @@
+diff --git a/node_modules/vue-cli-plugin-browser-extension/index.js b/node_modules/vue-cli-plugin-browser-extension/index.js
+index ee3d36c..1734fd4 100644
+--- a/node_modules/vue-cli-plugin-browser-extension/index.js
++++ b/node_modules/vue-cli-plugin-browser-extension/index.js
+@@ -58,7 +58,7 @@ module.exports = (api, options) => {
+     const isLegacyBundle = process.env.VUE_CLI_MODERN_MODE && !process.env.VUE_CLI_MODERN_BUILD
+     // Ignore rewriting names for background and content scripts
+     webpackConfig.output.filename((file) =>
+-      `js/[name]${isLegacyBundle ? `-legacy` : ``}${isProduction && options.filenameHashing && !userScripts.includes(file.chunk.name) ? '.[contenthash:8]' : ''}.js`
++      `${file.chunk.name === 'background' ? '' : 'js/'}[name]${isLegacyBundle ? `-legacy` : ``}${isProduction && options.filenameHashing && !userScripts.includes(file.chunk.name) ? '.[contenthash:8]' : ''}.js`
+     )
+     webpackConfig.merge({ entry })
+ 
+diff --git a/node_modules/vue-cli-plugin-browser-extension/lib/manifest.js b/node_modules/vue-cli-plugin-browser-extension/lib/manifest.js
+index c62792c..3de8f3b 100644
+--- a/node_modules/vue-cli-plugin-browser-extension/lib/manifest.js
++++ b/node_modules/vue-cli-plugin-browser-extension/lib/manifest.js
+@@ -1,8 +1,8 @@
+ const logger = require('@vue/cli-shared-utils')
+-const { keyExists, hashKey } = require('./signing-key')
++const {keyExists, hashKey} = require('./signing-key')
+ const validPackageSync = ['version', 'description']
+ 
+-function getManifestJsonString ({ manifestTransformer }, manifest) {
++function getManifestJsonString({manifestTransformer}, manifest) {
+   if (manifestTransformer && typeof manifestTransformer === 'function') {
+     const manifestCopy = JSON.parse(JSON.stringify(manifest))
+     manifest = manifestTransformer(manifestCopy)
+@@ -10,7 +10,7 @@ function getManifestJsonString ({ manifestTransformer }, manifest) {
+   return JSON.stringify(manifest, null, 2)
+ }
+ 
+-function syncManifestWithPackageJson ({ manifestSync }, packageJson, manifest) {
++function syncManifestWithPackageJson({manifestSync}, packageJson, manifest) {
+   validPackageSync.forEach((property) => {
+     if (manifestSync.includes(property)) {
+       manifest[property] = packageJson[property]
+@@ -26,19 +26,21 @@ module.exports = (api, pluginOptions, packageJson) => async (content) => {
+ 
+   syncManifestWithPackageJson(pluginOptions, packageJson, manifest)
+ 
+-  manifest.content_security_policy =
+-    manifest.content_security_policy || "script-src 'self' 'unsafe-eval'; object-src 'self'"
++  manifest.content_security_policy = {}
++  manifest.content_security_policy.extension_pages = manifest.content_security_policy?.extension_pages || "script-src 'self'; object-src 'self'"
+ 
+   // validate manifest
+ 
+   // If building for production (going to web store) abort early.
+   // The browser extension store will hash your signing key and apply CSP policies.
+   if (isProduction) {
+-    manifest.content_security_policy = manifest.content_security_policy.replace(/'unsafe-eval'/, '')
++    manifest.content_security_policy.extension_pages = manifest.content_security_policy?.extension_pages.replace(/'unsafe-eval'/, '')
+ 
+     // validate minimum options
+ 
+     return getManifestJsonString(pluginOptions, manifest)
++  } else {
++    manifest.content_security_policy.extension_pages += '; connect-src ws://localhost:9090/)';
+   }
+ 
+   if (hasKeyFile) {

@@ -34,6 +34,11 @@ module.exports = {
       entry: {
         injected: ['./src/content-scripts/injected-script.js'],
       },
+      output: {
+        filename: '[name].js',
+        chunkFilename: '[name].js',
+      },
+      devtool: 'source-map',
     });
   },
   configureWebpack: (webpackConfig) => {
