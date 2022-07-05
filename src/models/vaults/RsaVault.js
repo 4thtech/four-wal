@@ -125,7 +125,6 @@ export default class RsaVault {
   }
 
   decryptMessage(data) {
-    console.log(1, data);
     const result = [];
     if (Array.isArray(data)) {
       data.forEach((item) => {

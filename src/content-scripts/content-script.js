@@ -81,6 +81,10 @@ class ContentScript {
         ContentScript.signSolanaTransaction(nonSyncMessage);
         break;
 
+      case NetworkMessageTypes.SIGN_TRON_TRANSACTION:
+        ContentScript.signTronTransaction(nonSyncMessage);
+        break;
+
       case NetworkMessageTypes.REQUEST_FILE_DOWNLOAD:
         ContentScript.requestFileDownload(nonSyncMessage);
         break;
@@ -157,6 +161,14 @@ class ContentScript {
 
   static signSolanaTransaction(message) {
     InternalMessage.payload(InternalMessageTypes.SIGN_SOLANA_TRANSACTION, message.payload)
+      .send()
+      .then((res) => {
+        this.respond(message, res);
+      });
+  }
+
+  static signTronTransaction(message) {
+    InternalMessage.payload(InternalMessageTypes.SIGN_TRON_TRANSACTION, message.payload)
       .send()
       .then((res) => {
         this.respond(message, res);

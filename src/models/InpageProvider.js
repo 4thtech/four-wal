@@ -75,6 +75,17 @@ export default class InpageProvider {
   }
 
   // eslint-disable-next-line class-methods-use-this
+  signTronTransaction(transaction) {
+    return new Promise((resolve, reject) => {
+      NetworkMessageService.send(stream, NetworkMessageTypes.SIGN_TRON_TRANSACTION, transaction)
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((e) => reject(new Error(e.message)));
+    });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
   downloadFile(url) {
     return new Promise((resolve, reject) => {
       if (!url) {

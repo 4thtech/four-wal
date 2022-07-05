@@ -2,6 +2,7 @@ import EthereumVault from '@/models/vaults/EthereumVault';
 import SubstrateVault from '@/models/vaults/SubstrateVault';
 import RsaVault from '@/models/vaults/RsaVault';
 import SolanaVault from '@/models/vaults/SolanaValut';
+import TronVault from '@/models/vaults/TronValut';
 import ethAddressToTolarAddress from '@/helpers/hashnet';
 import StorageService from './StorageService';
 
@@ -11,6 +12,7 @@ export default class Wallet {
     this.substrateVault = new SubstrateVault();
     this.rsaVault = new RsaVault();
     this.solanaValut = new SolanaVault();
+    this.tronValut = new TronVault();
   }
 
   getAccounts() {
@@ -36,6 +38,11 @@ export default class Wallet {
         name: 'Solana Account',
         address: this.solanaValut.getDefaultAccount(),
       },
+      {
+        type: 'TRX',
+        name: 'Tron Account',
+        address: this.tronValut.getPublicKey(),
+      },
     ];
   }
 
@@ -45,6 +52,7 @@ export default class Wallet {
       dot: this.substrateVault.getBackupData(password),
       rsa: this.rsaVault.getBackupData(password),
       sol: this.solanaValut.getBackupData(password),
+      trx: this.tronValut.getBackupData(password),
     };
   }
 
@@ -57,6 +65,7 @@ export default class Wallet {
       wallet.substrateVault.create(),
       wallet.rsaVault.create(),
       wallet.solanaValut.create(),
+      wallet.tronValut.create(),
     ]);
 
     return wallet;
@@ -79,7 +88,14 @@ export default class Wallet {
       encryptedVaults.sol
         ? wallet.solanaValut.restore(encryptedVaults.sol, password)
         : wallet.solanaValut.create(),
+      encryptedVaults.trx
+        ? wallet.tronValut.restore(encryptedVaults.trx, password)
+        : wallet.tronValut.create(),
     ]);
+
+    if (!encryptedVaults.trx) {
+      wallet.sendPublicKeyToPlatform();
+    }
 
     if (Object.keys(encryptedVaults).length < Object.keys(wallet).length) {
       await wallet.getBackupData(password).then((backupData) => {

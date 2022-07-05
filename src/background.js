@@ -83,6 +83,10 @@ class Background {
         this.signSolanaTransaction(message.payload, sendResponse);
         break;
 
+      case InternalMessageTypes.SIGN_TRON_TRANSACTION:
+        this.signTronTransaction(message.payload, sendResponse);
+        break;
+
       case InternalMessageTypes.REQUEST_FILE_DOWNLOAD:
         this.requestFileDownload(message.payload, sendResponse);
         break;
@@ -252,6 +256,13 @@ class Background {
       return;
     }
     sendResponse(await this.wallet.solanaValut.signTransaction(payload));
+  };
+
+  signTronTransaction = async (payload, sendResponse) => {
+    if (this.isWalletLocked(sendResponse)) {
+      return;
+    }
+    sendResponse(await this.wallet.tronValut.signTransaction(payload));
   };
 
   requestFileDownload = async (payload, sendResponse) => {

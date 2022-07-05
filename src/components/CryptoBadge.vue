@@ -29,6 +29,7 @@ export default {
         DOT: '#e6007a',
         TOL: '#13ceef',
         SOL: '#14F195FF',
+        TRX: '#ff060a',
       };
 
       return colors[this.type];
